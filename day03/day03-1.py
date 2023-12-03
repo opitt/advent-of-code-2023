@@ -1,10 +1,32 @@
 # https://adventofcode.com/2023/day/3
 import os
-
+import re
+from collections import namedtuple
 
 def solve(input_lines):
-    resut=0
-    ...
+    lines = ["."*len(input_lines)]
+    lines.extend(input_lines)
+    lines.append(lines[0])
+    lines = [f".{line}." for line in lines ]
+
+    Partno = namedtuple("Partno", "value y x1 x2")
+    
+    numbers=[]
+    for y, line in enumerate(lines):
+        matches=re.finditer("(\d+)",line)
+        if matches:
+            numbers.extend([Partno(int(m.group()), y, m.start(), m.end()-1) for m in matches])
+
+    result=0
+    for partno in numbers:
+        adjacent=lines[partno.y-1][partno.x1-1:partno.x2+2]
+        adjacent+=lines[partno.y][partno.x1-1]
+        adjacent+=lines[partno.y][partno.x2+1]
+        adjacent+=lines[partno.y+1][partno.x1-1:partno.x2+2]
+        is_not_part = re.fullmatch("[\.]+",adjacent)
+        if not is_not_part:
+            result+=partno.value
+
     return result
 
 def main(test):
@@ -21,5 +43,5 @@ def main(test):
     # ???
 
 
-main(test=True)
-#main(test=False)
+#main(test=True)
+main(test=False)
