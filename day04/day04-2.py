@@ -9,9 +9,11 @@ def solve(lines):
         wins, nums = set(win_num.split()), set(my_card.split())
         match = len(wins.intersection(nums))
         if match > 0:
-            for _ in range(cards[card]):
-                for c in range(1, match + 1):
-                    cards[card + c] += 1
+            # you win copies of the scratchcards below the winning card equal to the number of matches.
+            # Copies of scratchcards are scored like normal scratchcards.
+            # so if I now have 10 of card 5, I card 5 has 2 matches, I win 10x card 6 and 10x card 7.
+            for c in range(1, match + 1):
+                cards[card + c] += cards[card]
 
     return sum(cards)
 
