@@ -7,11 +7,11 @@ Fromto = namedtuple("Fromto", "dest_min dest_max src_min src_max")
 
 
 def solve(lines):
-
     def find_location(seed, almanac):
         thing = seed
         for almanac_line in almanac:
             for fromto in almanac_line:
+                # if no mapping found, then dest has the same value as sourc
                 if fromto.src_min <= thing <= fromto.src_max:
                     thing = fromto.dest_min + thing - fromto.src_min
                     break
