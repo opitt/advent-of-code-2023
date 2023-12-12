@@ -39,7 +39,7 @@ def solve(lines):
                         seed_a = fromto.b + 1
             if seed_a != None:
                 result.append((seed_a, seed_b))
-            print(result)
+            #print(result)
 
         return deepcopy(result)
 
