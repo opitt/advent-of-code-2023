@@ -3,7 +3,6 @@ import os
 import re
 from collections import namedtuple
 from copy import deepcopy
-from unittest import result
 
 Fromto = namedtuple("Fromto", "a b to_a to_b")
 
@@ -25,14 +24,14 @@ def solve(lines):
                     if seed_b <= fromto.b:
                         result.append(
                             (
-                                fromto.to_a + (seed_a - fromto.a),
-                                fromto.to_a + (fromto.b - seed_b),
+                                seed_a,
+                                seed_b,
                             )
                         )
                         break
                     else:
                         result.append(
-                            (fromto.to_a + (seed_a - fromto.a), fromto.to_b)
+                            (seed_a, fromto.to_b)
                         )
                         seed_a = fromto.b + 1
             print(result)
