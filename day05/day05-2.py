@@ -1,6 +1,7 @@
 # https://adventofcode.com/2023/day/5
 import os
 import re
+import datetime as dt
 from collections import namedtuple
 from copy import deepcopy
 
@@ -88,8 +89,12 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    #
+    # 4917124
 
+start_t = dt.datetime.now()
 
 #main(test=True)
 main(test=False)
+
+end_t = dt.datetime.now()
+print(f"Runtime: {(end_t-start_t).total_seconds()}")
