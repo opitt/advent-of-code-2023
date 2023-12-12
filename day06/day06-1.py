@@ -26,7 +26,7 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    # 
+    # 303600
 
 start_t = dt.datetime.now()
 
