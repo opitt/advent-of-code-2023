@@ -1,6 +1,7 @@
 # https://adventofcode.com/2023/day/5
 import os
 import re
+import datetime as dt
 from collections import namedtuple
 from copy import deepcopy
 
@@ -19,22 +20,27 @@ def solve(lines):
                         seed_a = fromto.a
                     else:
                         result.append((seed_a, seed_b))
+                        seed_a = None
                         break
                 if seed_a <= fromto.b:
                     if seed_b <= fromto.b:
                         result.append(
                             (
-                                seed_a,
-                                seed_b,
+                                fromto.to_a + (seed_a - fromto.a), #seed_a
+                                fromto.to_a + (seed_b - fromto.a) #seed_b,
                             )
                         )
+                        seed_a = None
                         break
                     else:
                         result.append(
-                            (seed_a, fromto.to_b)
+                            (fromto.to_a + (seed_a - fromto.a), #seed_a
+                             fromto.to_b)
                         )
                         seed_a = fromto.b + 1
-            print(result)
+            if seed_a != None:
+                result.append((seed_a, seed_b))
+            #print(result)
 
         return deepcopy(result)
 
@@ -83,8 +89,12 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    #
+    # 4917124
 
+start_t = dt.datetime.now()
 
-main(test=True)
-# main(test=False)
+#main(test=True)
+main(test=False)
+
+end_t = dt.datetime.now()
+print(f"Runtime: {(end_t-start_t).total_seconds()}")
