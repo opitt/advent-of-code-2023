@@ -14,8 +14,8 @@ func main() {
 	day01.Day01_2(day01.Input)
 	day02.Day02_1(day02.Input)
 	day02.Day02_2(day02.Input)
-	run("day 05 1 naive    ", day05.Day05_1, day05.Input)
-	//run("day 5 b parallel ", day5.AoC_2023_5b_par, static.Data2023_5_Input)
+	run("day 05 1 naive", day05.Day05_1, day05.Input)
+	//run("day 5 b parallel", day5.AoC_2023_5b_par, static.Data2023_5_Input)
 	run("day 05 2 backwards simple", day05.Day05_2b, day05.Input)
 }
 
