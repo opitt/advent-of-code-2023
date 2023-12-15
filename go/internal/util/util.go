@@ -1,6 +1,8 @@
 package util
 
 import (
+	"bufio"
+	"bytes"
 	"strconv"
 	"strings"
 	"testing"
@@ -34,4 +36,14 @@ func Max[T int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 |
 		return a
 	}
 	return b
+}
+
+func LoadLines(dataB []byte) (lines []string) {
+	inbuf := bytes.NewBuffer(dataB)
+	inscan := bufio.NewScanner(inbuf)
+	for inscan.Scan() {
+		line := strings.TrimSpace(inscan.Text())
+		lines = append(lines, line)
+	}
+	return lines
 }
