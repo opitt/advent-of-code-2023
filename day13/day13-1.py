@@ -6,26 +6,25 @@ import datetime as dt
 def solve(lines):
     
     def find_reflections_vertical(pattern):
-        new_pattern=["".join(list(reversed(col))) for col in zip(*pattern)]
+        new_pattern=["".join(list(col)) for col in zip(*pattern)]
         return find_reflections_horizontal(new_pattern)
 
     def find_reflections_horizontal(pattern):
-        middles=[]
-        for y, line in enumerate(pattern[:-1]):
-            if line == pattern[y+1]:
-                middles.append(y)
+        # find all side by side rows, which are equal 
+        middles = [y for y, line in enumerate(pattern[:-1]) if line == pattern[y+1] ]
+        
+        m=-1
         for middle in middles:
-            # check, if perfect
+            # check, if the middle is really a perfect mirror
             mirror_width = min(middle,len(pattern)-(middle+1)-1)
-            perfect=[]
-            for r in range(1,mirror_width+1):
-                perfect.append(pattern[middle-r]==pattern[middle+1+r])
+            perfect=[ pattern[middle-r]==pattern[middle+1+r] for r in range(1,mirror_width+1) ]
             if all(perfect):
+                m=middle
                 break
 
-        return middle+1 if middle>0 and (all(perfect) or len(perfect)==0) else 0
+        return m+1 if m>=0 and (all(perfect) or len(perfect)==0) else 0
     
-
+    # separate the patterns
     patterns=[[]]
     for line in lines:
         if line=="":
@@ -33,15 +32,13 @@ def solve(lines):
         else:
             patterns[-1].append(line)
     
-    hor=vert=0
-    for p, pattern in enumerate(patterns):
+    res=0
+    for pattern in patterns:
         h = find_reflections_horizontal(pattern)
-        hor += h
         v = find_reflections_vertical(pattern)
-        vert += v
-        print(p, v,h)
+        res+=h*100+v
 
-    return hor*100+vert
+    return res
 
 
 def main(test):
@@ -55,12 +52,12 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    # 
+    # 37381
 
 start_t = dt.datetime.now()
 
-main(test=True)
-#main(test=False)
+#main(test=True)
+main(test=False)
 
 end_t = dt.datetime.now()
 print(f"Runtime: {(end_t-start_t).total_seconds()}")
