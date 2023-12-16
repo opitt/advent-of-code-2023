@@ -11,34 +11,28 @@ def solve(lines):
     DOWN=(0,1)
     MAXX=len(lines[0])-1
     MAXY=len(lines)-1
-    # read the maze
+
+    Beam = namedtuple("Beam","x y dir")
+
     class Square:
         def __init__(self, type: str):
             self.type = type
-            self.dirs = {UP: False,
+            self.dir_visited = {UP: False,
                         DOWN: False,
                         LEFT: False,
                         RIGHT: False,}
         
         def set_beam_was_here(self, beam):
-            self.dirs[beam.dir] = True
+            self.dir_visited[beam.dir] = True
 
         def beam_was_here(self, beam):
-            return self.dirs[beam.dir]
+            return self.dir_visited[beam.dir]
 
     class Maze:
-        NEWDIR= {(".",RIGHT): (RIGHT,),
-                (".",LEFT): (LEFT,),
-                (".",UP): (UP,),
-                (".",DOWN): (DOWN,),
-                ("-",RIGHT): (RIGHT,),
-                ("-",LEFT): (LEFT,),
-                ("-",UP): (LEFT, RIGHT,),
+        NEWDIR= {("-",UP): (LEFT, RIGHT,),
                 ("-",DOWN): (LEFT, RIGHT,),
                 ("|",RIGHT): (UP, DOWN,),
                 ("|",LEFT): (UP, DOWN,),
-                ("|",UP): (UP,),
-                ("|",DOWN): (DOWN,),
                 ("\\",RIGHT): (DOWN,),
                 ("\\",LEFT): (UP,),
                 ("\\",UP): (LEFT,),
@@ -48,6 +42,7 @@ def solve(lines):
                 ("/",UP): (RIGHT,),
                 ("/",DOWN): (LEFT,),
                 }
+        
         def __init__(self, lines: list):
             self.maze_energy = [[" " for _ in row] for row in lines]
             self.maze = [[Square(col) for col in row] for row in lines]
@@ -58,16 +53,13 @@ def solve(lines):
         def set_beam_was_here(self, beam):
             self.maze[beam.y][beam.x].set_beam_was_here(beam)
             self.maze_energy[beam.y][beam.x]="#"
-            return self.NEWDIR[(self.maze[beam.y][beam.x].type,beam.dir)]
+            return self.NEWDIR.get((self.maze[beam.y][beam.x].type,beam.dir),(beam.dir,))
         
         def get_energy(self):
             return sum([row.count("#") for row in self.maze_energy])
-            
 
-    Beam = namedtuple("Beam","x y dir")
-
-    beam_configurations=[]
-    beam_configurations.extend([[Beam(x=x,y=0,dir=DOWN),] for x in range(MAXX+1)])
+    # generate all possibilities, of beam starts top row/down, bottom row/up, left col/right, right col/left
+    beam_configurations = [[Beam(x=x,y=0,dir=DOWN),] for x in range(MAXX+1)]
     beam_configurations.extend([[Beam(x=x,y=MAXY,dir=UP),] for x in range(MAXX+1)])
     beam_configurations.extend([[Beam(x=0,y=y,dir=RIGHT),] for y in range(MAXY+1)])
     beam_configurations.extend([[Beam(x=MAXX,y=y,dir=LEFT),] for y in range(MAXY+1)])
@@ -82,17 +74,14 @@ def solve(lines):
                 if not maze.beam_was_here(beam):
                     newdirs=maze.set_beam_was_here(beam)
                     for newdir in newdirs:
-                        inside = 0<=(beam.x + newdir[0])<=MAXX and 0<=(beam.y + newdir[1])<=MAXY
-                        if inside:
+                        if 0<=(beam.x + newdir[0])<=MAXX and 0<=(beam.y + newdir[1])<=MAXY:
                             nextbeam=Beam(x=beam.x+newdir[0],y=beam.y+newdir[1],dir=newdir)
                             if nextbeam not in nextbeams:
                                 nextbeams.append(nextbeam)
             beams = nextbeams
-        
         # count the energy
         energy= maze.get_energy()
         configuration_energy.append(energy)
- 
     return max(configuration_energy)
 
 
