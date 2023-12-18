@@ -2,25 +2,19 @@
 import os
 import datetime as dt
 
-
 def solve(lines):
     
     def predict_next(data):
         diffs = [[d for d in data]]
         while sum(diffs[-1])!=0:
             diffs.append([b-a for a,b in zip(diffs[-1][:-1], diffs[-1][1:])])
-
         predicted=0
         for d in diffs[::-1]:
             predicted += d[-1]
-        
         return predicted
     
     reports = [list(map(int,row.split())) for row in lines]
     return sum([predict_next(report) for report in reports])
-        
-    
-
 
 def main(test):
     # READ INPUT FILE
@@ -33,7 +27,7 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    # 
+    # 1806615041
 
 start_t = dt.datetime.now()
 main(test=True)
