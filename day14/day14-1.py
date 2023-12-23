@@ -6,10 +6,14 @@ import re
 def solve(lines):
     
     def tilt(col):
-        regex = r"[.]O"
-        subst = "O."
+        
+        def repl(s):
+            os=s.group(0).count("O")
+            return "O"*os + "."*(len(s.group(0))-os) 
+        
+        regex = r"(?=[.])[.O]+O"
         while True:
-            col, n = re.subn(regex, subst, col)
+            col, n = re.subn(regex, repl, col)
             if n==0:break
         value = sum([v if c=="O" else 0 for v,c in enumerate(reversed(col),1)])
         return value
@@ -31,7 +35,7 @@ def main(test):
 
     result = solve(lines)
     print(f"The result is {result}.")
-    # 6958
+    # 113525
 
 start_t = dt.datetime.now()
 main(test=True)
